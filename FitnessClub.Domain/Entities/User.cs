@@ -1,0 +1,40 @@
+﻿using FitnessClub.Domain.Services;
+using FitnessClub.Domain.ValueObjects;
+
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FitnessClub.Domain.Entities
+{
+    public class User
+    {
+        public Guid Id { get; private set; }
+        public Email Email { get; private set; }
+        public PhoneNumber PhoneNumber { get; private set; }
+        public FullName FullName { get; private set; }
+        public PasswordHash PasswordHash { get; private set; }
+
+        private User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
+        {
+            Id = id;
+            Email = email;
+            PhoneNumber = phoneNumber;
+            FullName = fullname;
+            PasswordHash = passwordHash;
+        }
+
+        public static User Register(string email, string phone, string plainPassword, IPasswordHasher hasher, FullName name)
+        {
+            var id = Guid.NewGuid();
+            var userEmail = Email.Create(email);
+            var userPhone = PhoneNumber.Create(phone);
+            var passwordHash = PasswordHash.Create(plainPassword, hasher);
+
+            return new User(id, userEmail, userPhone, name, passwordHash);
+        }
+    }
+}
