@@ -36,5 +36,10 @@ namespace FitnessClub.Domain.Entities
 
             return new User(id, userEmail, userPhone, name, passwordHash);
         }
+
+        public bool VerifyPassword(string password, IPasswordHasher hasher)
+        {
+            return hasher.Verify(password, PasswordHash.Hash, PasswordHash.Salt);
+        }
     }
 }

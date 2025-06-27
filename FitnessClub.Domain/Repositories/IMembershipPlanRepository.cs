@@ -9,12 +9,14 @@ namespace FitnessClub.Domain.Repositories
 {
     public interface IMembershipPlanRepository
     {
-        Task<MembershipPlan?> GetByIdAsync(Guid id);
+        Task<MembershipPlan?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<IEnumerable<MembershipPlan>?> GetAllAsync();
+        Task<IEnumerable<MembershipPlan>?> GetAllAsync(CancellationToken cancellationToken);
 
-        Task AddAsync(MembershipPlan plan);
+        Task AddAsync(MembershipPlan plan, CancellationToken cancellationToken);
 
-        Task Update(MembershipPlan plan);
+        Task Update(MembershipPlan plan, CancellationToken cancellationToken);
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
