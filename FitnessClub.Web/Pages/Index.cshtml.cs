@@ -1,3 +1,6 @@
+using FitnessClub.Application.DTOs.Commands;
+using FitnessClub.Application.Interfaces;
+using FitnessClub.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,16 +8,25 @@ namespace FitnessClub.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly IUserService _userService;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(IUserService userService) => _userService = userService;
+
+        [BindProperty]
+        public RegisterUserCommand Command { get; set; }
+
+        public string? Message { get; private set; }
+
+        public void OnGet() { }
+
+        public async Task<IActionResult> OnPostAsync()
         {
-            _logger = logger;
-        }
+            if (!ModelState.IsValid)
+                return Page();
 
-        public void OnGet()
-        {
-
+            var result = await _userService.RegisterAsync(Command, HttpContext.RequestAborted);
+            Message = result.IsSuccess ? "Registration successful!" : result.Error;
+            return Page();
         }
     }
 }

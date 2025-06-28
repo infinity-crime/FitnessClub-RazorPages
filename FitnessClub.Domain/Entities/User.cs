@@ -18,7 +18,9 @@ namespace FitnessClub.Domain.Entities
         public FullName FullName { get; private set; }
         public PasswordHash PasswordHash { get; private set; }
 
-        private User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
+        private User() { }
+
+        public User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
         {
             Id = id;
             Email = email;

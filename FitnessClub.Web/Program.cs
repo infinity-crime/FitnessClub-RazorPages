@@ -1,7 +1,32 @@
+using FitnessClub.Application.Interfaces;
+using FitnessClub.Application.Services;
+using FitnessClub.Domain.Repositories;
+using FitnessClub.Domain.Services;
+using FitnessClub.Infrastructure.Data;
+using FitnessClub.Infrastructure.Repositories;
+using FitnessClub.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets("secrets.json");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+{
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.MigrationsAssembly("FitnessClub.Infrastructure");
+    });
+});
+
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    .AddRazorRuntimeCompilation();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();
 
@@ -14,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 app.UseRouting();
 

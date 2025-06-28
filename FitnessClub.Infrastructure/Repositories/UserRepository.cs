@@ -1,5 +1,8 @@
 ﻿using FitnessClub.Domain.Entities;
 using FitnessClub.Domain.Repositories;
+using FitnessClub.Domain.ValueObjects;
+using FitnessClub.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +13,32 @@ namespace FitnessClub.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task AddAsync(User user, CancellationToken cancellationToken)
+        private readonly ApplicationContext _dbContext;
+        public UserRepository(ApplicationContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+        public async Task AddAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _dbContext.AddAsync(user, cancellationToken);
         }
 
-        public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Email.Value == email, cancellationToken);
         }
 
-        public Task SaveChangesAsync(CancellationToken cancellationToken)
+        public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task UpdateAsync(User user, CancellationToken cancellationToken)

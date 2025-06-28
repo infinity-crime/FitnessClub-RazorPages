@@ -23,6 +23,11 @@ namespace FitnessClub.Infrastructure.Data
             {
                 u.HasKey(x => x.Id);
 
+                u.OwnsOne(u => u.Email);
+                u.OwnsOne(u => u.PhoneNumber);
+                u.OwnsOne(u => u.FullName);
+                u.OwnsOne(u => u.PasswordHash);
+
                 u.OwnsOne(x => x.Email, em =>
                 {
                     em.Property(y => y.Value)

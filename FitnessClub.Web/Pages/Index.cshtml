@@ -1,10 +1,49 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Register";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+
+    <div>
+        <label asp-for="Command.Email"></label>
+        <input asp-for="Command.Email" />
+        <span asp-validation-for="Command.Email"></span>
+    </div>
+
+    <div>
+        <label asp-for="Command.PhoneNumber"></label>
+        <input asp-for="Command.PhoneNumber" />
+        <span asp-validation-for="Command.PhoneNumber"></span>
+    </div>
+
+    <div>
+        <label asp-for="Command.FirstName"></label>
+        <input asp-for="Command.FirstName" />
+        <span asp-validation-for="Command.FirstName"></span>
+    </div>
+
+    <div>
+        <label asp-for="Command.Surname"></label>
+        <input asp-for="Command.Surname" />
+        <span asp-validation-for="Command.Surname"></span>
+    </div>
+
+    <div>
+        <label asp-for="Command.Patronymic"></label>
+        <input asp-for="Command.Patronymic" />
+        <span asp-validation-for="Command.Patronymic"></span>
+    </div>
+
+    <div>
+        <label asp-for="Command.Password"></label>
+        <input asp-for="Command.Password" />
+        <span asp-validation-for="Command.Password"></span>
+    </div>
+
+    <button type="submit">Register</button>
+
+</form>
