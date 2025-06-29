@@ -21,12 +21,6 @@ namespace FitnessClub.Domain.Entities
         private Subscription(Guid id, Guid userId, Guid membershipPlanId, DateTime startDate, 
             DateTime endDate, SubscriptionStatus status)
         {
-            if ((id == Guid.Empty) || (userId == Guid.Empty) || (membershipPlanId == Guid.Empty))
-                throw new DomainException("Subscription id/userId/planId is required!");
-
-            if (startDate >= endDate)
-                throw new DomainException("The subscription start date cannot be greater than or equal to the subscription end date!");
-
             Id = id;
             UserId = userId;
             MembershipPlanId = membershipPlanId;
@@ -39,7 +33,7 @@ namespace FitnessClub.Domain.Entities
         public static Subscription Create(User user, MembershipPlan plan)
         {
             if ((user is null) || (plan is null))
-                throw new DomainException("User/Membership_plan is required!");
+                throw new DomainException("User/Membership plan is required!");
 
             var id = Guid.NewGuid();
             var startDate = DateTime.Now;

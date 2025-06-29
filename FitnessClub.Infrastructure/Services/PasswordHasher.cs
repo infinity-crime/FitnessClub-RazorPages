@@ -40,7 +40,7 @@ namespace FitnessClub.Infrastructure.Services
                 password: plainText,
                 salt: saltBytes,
                 prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100,
+                iterationCount: 1000,
                 numBytesRequested: 256 / 8
                 ));
 

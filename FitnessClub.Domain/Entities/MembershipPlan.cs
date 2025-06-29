@@ -19,15 +19,6 @@ namespace FitnessClub.Domain.Entities
 
         private MembershipPlan(Guid id, string name, string description, Money price, int durationInMonths)
         {
-            if (id == Guid.Empty)
-                throw new DomainException("The plan ID must be non-zero!");
-
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
-                throw new DomainException("Plan name/description is required!");
-
-            if(durationInMonths <= 0)
-                throw new DomainException("Duration must be greater than zero!");
-
             Id = id;
             Name = name;
             Description = description;
@@ -38,6 +29,12 @@ namespace FitnessClub.Domain.Entities
         public static MembershipPlan Create(string name, string description, decimal amountPrice, 
             string currencyPrice, int durationInMonths)
         {
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+                throw new DomainException("Plan name/description is required!");
+
+            if (durationInMonths <= 0)
+                throw new DomainException("Duration must be greater than zero!");
+
             var id = Guid.NewGuid();
             var price = Money.Create(amountPrice, currencyPrice);
 
