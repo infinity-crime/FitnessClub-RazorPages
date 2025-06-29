@@ -14,17 +14,17 @@ namespace FitnessClub.Domain.ValueObjects
 
         private PhoneNumber(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new DomainException("Phone number cannot be empty");
-
-            if (value.Length != 12 || !value.Contains("+7"))
-                throw new DomainException("Non-standard phone number format");
-
             Value = value;
         }
 
         public static PhoneNumber Create(string phone)
         {
+            if (string.IsNullOrWhiteSpace(phone))
+                throw new DomainException("Phone number cannot be empty");
+
+            if (phone.Length != 12 || !phone.Contains("+7"))
+                throw new DomainException("Non-standard phone number format (length = 12 and contains +7)");
+
             return new PhoneNumber(phone);
         }
 

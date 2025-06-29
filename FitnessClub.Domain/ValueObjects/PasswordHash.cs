@@ -16,9 +16,6 @@ namespace FitnessClub.Domain.ValueObjects
 
         private PasswordHash(string hash, string salt)
         {
-            if (string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(salt))
-                throw new DomainException("Password hash or salt cannot be empty!");
-
             Hash = hash;
             Salt = salt;
         }
@@ -29,6 +26,10 @@ namespace FitnessClub.Domain.ValueObjects
                 throw new DomainException("Password must be at least 8 characters long!");
 
             var (hash, salt) = passwordHasher.Hash(plainText);
+
+            if (string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(salt))
+                throw new DomainException("Password hash or salt cannot be empty!");
+
             return new PasswordHash(hash, salt);
         }
 

@@ -15,17 +15,20 @@ namespace FitnessClub.Domain.ValueObjects
 
         private Money(decimal amount, string currency)
         {
+            Amount = amount;
+            Currency = currency;
+        }
+
+        public static Money Create(decimal amount, string currency)
+        {
             if (amount <= 0)
                 throw new DomainException("Amount must be greater than zero!");
 
             if (string.IsNullOrWhiteSpace(currency))
                 throw new DomainException("Currency must be provided!");
 
-            Amount = amount;
-            Currency = currency;
+            return new Money(amount, currency);
         }
-
-        public static Money Create(decimal amount, string currency) => new Money(amount, currency);
 
         public override string ToString() => $"{Amount} {Currency}";
 

@@ -13,14 +13,14 @@ namespace FitnessClub.Domain.ValueObjects
 
         private Email(string value)
         {
-            if (string.IsNullOrEmpty(value) || !value.Contains('@'))
-                throw new DomainException("Invalid email format!");
-
             Value = value;
         }
 
         public static Email Create(string email)
         {
+            if (string.IsNullOrEmpty(email) || !email.Contains('@'))
+                throw new DomainException("Invalid email format!");
+
             return new Email(email);
         }
 
