@@ -16,7 +16,5 @@ namespace FitnessClub.Domain.Repositories
         Task Add(Subscription subscription, CancellationToken cancellationToken);
 
         Task Update(Subscription subscription, CancellationToken cancellationToken);
-
-        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

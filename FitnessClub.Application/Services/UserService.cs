@@ -20,11 +20,13 @@ namespace FitnessClub.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserService (IUserRepository userRepository, IPasswordHasher passwordHasher)
+        public UserService (IUserRepository userRepository, IPasswordHasher passwordHasher, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<UserDto>> RegisterAsync(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -39,7 +41,7 @@ namespace FitnessClub.Application.Services
                 var user = User.Register(command.Email, command.PhoneNumber, command.Password, _passwordHasher, fullname);
 
                 await _userRepository.AddAsync(user, cancellationToken);
-                await _userRepository.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 var responseDto = new UserDto
                 {

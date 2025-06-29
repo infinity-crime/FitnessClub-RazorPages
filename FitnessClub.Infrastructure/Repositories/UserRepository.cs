@@ -36,11 +36,6 @@ namespace FitnessClub.Infrastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-
         public Task UpdateAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
