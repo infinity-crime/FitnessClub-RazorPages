@@ -12,6 +12,7 @@ namespace FitnessClub.Infrastructure.Data
     public class ApplicationContext : DbContext
     {
         public DbSet<User> Users { get; set; } = default!;
+        public DbSet<MembershipPlan> Plans { get; set; } = default!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
