@@ -18,6 +18,10 @@ namespace FitnessClub.Domain.Entities
         public SubscriptionStatus Status { get; private set; }
         public DateTime? LastModifiedDate { get; private set; }
 
+        // Навигационные свойства для удобства запросов EF Core
+        public User? User { get; private set; }
+        public MembershipPlan? MembershipPlan { get; private set; }
+
         private Subscription(Guid id, Guid userId, Guid membershipPlanId, DateTime startDate, 
             DateTime endDate, SubscriptionStatus status)
         {

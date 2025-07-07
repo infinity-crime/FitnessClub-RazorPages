@@ -5,6 +5,7 @@ using FitnessClub.Domain.Services;
 using FitnessClub.Infrastructure.Data;
 using FitnessClub.Infrastructure.Repositories;
 using FitnessClub.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,15 @@ builder.Services.Configure<RouteOptions>(o =>
     o.LowercaseQueryStrings = true;
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "Account/Login";
+        options.LogoutPath = "Account/Logout";
+        options.AccessDeniedPath = "/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromDays(1); // время жизни куки
+    });
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -47,11 +57,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

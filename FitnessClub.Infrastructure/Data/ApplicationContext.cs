@@ -12,6 +12,7 @@ namespace FitnessClub.Infrastructure.Data
     public class ApplicationContext : DbContext
     {
         public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Subscription> Subscriptions { get; set; } = default!;
         public DbSet<MembershipPlan> Plans { get; set; } = default!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
@@ -28,6 +29,7 @@ namespace FitnessClub.Infrastructure.Data
                 {
                     em.Property(y => y.Value)
                         .HasColumnName("Email")
+                        .HasMaxLength(50)
                         .IsRequired();
                 });
 
@@ -46,14 +48,17 @@ namespace FitnessClub.Infrastructure.Data
                 {
                     fn.Property(y => y.Name)
                         .HasColumnName("Name")
+                        .HasMaxLength(50)
                         .IsRequired();
 
                     fn.Property(y => y.Surname)
                         .HasColumnName("Surname")
+                        .HasMaxLength(50)
                         .IsRequired();
 
                     fn.Property(y => y.Patronymic)
                         .HasColumnName("Patronymic")
+                        .HasMaxLength(50)
                         .IsRequired();
                 });
 
@@ -63,6 +68,50 @@ namespace FitnessClub.Infrastructure.Data
                         .HasColumnName("PhoneNumber")
                         .IsRequired();
                 });
+
+                u.HasMany(u => u.Subscriptions)
+                 .WithOne(s => s.User)
+                 .HasForeignKey(s => s.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<MembershipPlan>(builder =>
+            {
+                builder.HasKey(p => p.Id);
+
+                builder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+                builder.Property(p => p.Description)
+                .IsRequired()
+                .HasMaxLength(500);
+
+                builder.Property(p => p.DurationInMonths)
+                .IsRequired();
+
+                builder.OwnsOne(p => p.Price, prc =>
+                {
+                    prc.Property(y => y.Amount)
+                    .HasColumnName("PriceAmount")
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                    prc.Property(y => y.Currency)
+                    .HasColumnName("PriceCurrency")
+                    .HasMaxLength(3)
+                    .IsRequired();
+                });
+            });
+
+            modelBuilder.Entity<Subscription>(builder =>
+            {
+                builder.HasKey(s => s.Id);
+
+                builder.HasOne(s => s.MembershipPlan)
+                .WithMany()
+                .HasForeignKey(s => s.MembershipPlanId)
+                .OnDelete(DeleteBehavior.Restrict); // нельзя удалить план, если на него есть подписки
             });
         }
     }
