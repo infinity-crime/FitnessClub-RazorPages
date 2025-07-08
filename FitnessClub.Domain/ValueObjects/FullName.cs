@@ -24,7 +24,7 @@ namespace FitnessClub.Domain.ValueObjects
         public static FullName Create(string name, string surname, string patronymic)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(patronymic))
-                throw new DomainException("Surname, name, patronymic cannot be empty!");
+                throw new DomainException("ФИО обязательны!");
 
             return new FullName(name, surname, patronymic);
         }

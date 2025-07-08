@@ -20,10 +20,10 @@ namespace FitnessClub.Domain.ValueObjects
         public static PhoneNumber Create(string phone)
         {
             if (string.IsNullOrWhiteSpace(phone))
-                throw new DomainException("Phone number cannot be empty");
+                throw new DomainException("Номер телефона не может быть пустым");
 
             if (phone.Length != 12 || !phone.Contains("+7"))
-                throw new DomainException("Non-standard phone number format (length = 12 and contains +7)");
+                throw new DomainException("Номер должен содержать 11 цифр и + в начале");
 
             return new PhoneNumber(phone);
         }

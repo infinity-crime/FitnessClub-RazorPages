@@ -17,6 +17,8 @@ namespace FitnessClub.Domain.Entities
         public Money Price { get; private set; }
         public int DurationInMonths { get; private set; }
 
+        private MembershipPlan() { }
+
         private MembershipPlan(Guid id, string name, string description, Money price, int durationInMonths)
         {
             Id = id;

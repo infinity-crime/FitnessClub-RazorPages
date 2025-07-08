@@ -23,7 +23,7 @@ namespace FitnessClub.Domain.ValueObjects
         public static PasswordHash Create(string plainText, IPasswordHasher passwordHasher)
         {
             if (plainText.Length < 8)
-                throw new DomainException("Password must be at least 8 characters long!");
+                throw new DomainException("Пароль должен содержать 8 или больше символов!");
 
             var (hash, salt) = passwordHasher.Hash(plainText);
 

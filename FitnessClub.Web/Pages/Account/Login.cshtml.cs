@@ -48,7 +48,7 @@ namespace FitnessClub.Web.Pages.Account
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimIdentity));
 
-            return RedirectToPage("/");
+            return RedirectToPage("/Index");
         }
 
         public class UserInputModel
