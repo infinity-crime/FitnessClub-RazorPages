@@ -14,22 +14,46 @@ namespace FitnessClub.Application.Services
     public class MembershipPlanService : IMembershipPlanService
     {
         private readonly IMembershipPlanRepository _membershipPlanRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public MembershipPlanService(IMembershipPlanRepository membershipPlanRepository, IUnitOfWork unitOfWork)
         {
             _membershipPlanRepository = membershipPlanRepository;
-            _unitOfWork = unitOfWork;
         }
 
-        public Task<Result<IEnumerable<MembershipPlanDto>>> AllPlansAsync()
+        public async Task<Result<IEnumerable<MembershipPlanDto>>> AllPlansAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var plans = await _membershipPlanRepository.GetAllAsync(cancellationToken);
+            if(plans != null)
+            {
+                var plansDto = plans.Select(x => new MembershipPlanDto
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    DurationInMonths = x.DurationInMonths
+                });
+
+                return Result<IEnumerable<MembershipPlanDto>>.Success(plansDto);
+            }
+
+            return Result<IEnumerable<MembershipPlanDto>>.Failure("Нет доступных абонементов");
         }
 
-        public Task<Result<MembershipPlanDto>> PlanByIdAsync()
+        public async Task<Result<MembershipPlanDto>> PlanByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var plan = await _membershipPlanRepository.GetByIdAsync(id, cancellationToken);
+            if (plan == null)
+                return Result<MembershipPlanDto>.Failure("Такого абонемента нет");
+
+            var response = new MembershipPlanDto
+            {
+                Name = plan.Name,
+                Description = plan.Description,
+                Price = plan.Price,
+                DurationInMonths = plan.DurationInMonths
+            };
+
+            return Result<MembershipPlanDto>.Success(response);
         }
     }
 }

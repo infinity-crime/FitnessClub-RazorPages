@@ -1,4 +1,31 @@
 ﻿@page
 @model FitnessClub.Web.Pages.MembershipPlans.IndexModel
 @{
+    ViewData["Title"] = "Абонементы";
 }
+
+<div class="container py-4">
+    <h2 class="mb-4">Доступные абонементы</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var plan in Model.Plans)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@plan.Name</h5>
+                        <p class="card-text flex-grow-1">@plan.Description</p>
+                        <div class="mt-3">
+                            <span class="fw-bold fs-5">@plan.Price.Amount</span>
+                            <span class="text-muted">@plan.Price.Currency</span>
+                        </div>
+                        <form method="post" asp-page-handler="Purchase" class="mt-3">
+                            
+                            <button type="submit" class="btn btn-primary w-100">Оформить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -31,6 +31,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IMembershipPlanRepository, MembershipPlanRepository>();
+builder.Services.AddScoped<IMembershipPlanService, MembershipPlanService>();
 #endregion
 
 builder.Services.Configure<RouteOptions>(o =>

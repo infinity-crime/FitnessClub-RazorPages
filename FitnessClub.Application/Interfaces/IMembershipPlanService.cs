@@ -11,8 +11,8 @@ namespace FitnessClub.Application.Interfaces
 {
     public interface IMembershipPlanService
     {
-        Task<Result<IEnumerable<MembershipPlanDto>>> AllPlansAsync();
+        Task<Result<IEnumerable<MembershipPlanDto>>> AllPlansAsync(CancellationToken cancellationToken);
 
-        Task<Result<MembershipPlanDto>> PlanByIdAsync();
+        Task<Result<MembershipPlanDto>> PlanByIdAsync(Guid id, CancellationToken cancellationToken);
     }
 }

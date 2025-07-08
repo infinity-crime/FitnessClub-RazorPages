@@ -1,11 +1,11 @@
 ﻿using FitnessClub.Domain.Entities;
-
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace FitnessClub.Infrastructure.Data
 {
@@ -19,6 +19,8 @@ namespace FitnessClub.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var planId1 = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>(u =>
@@ -103,6 +105,25 @@ namespace FitnessClub.Infrastructure.Data
                     .IsRequired();
                 });
             });
+
+            modelBuilder.Entity<MembershipPlan>().HasData(
+                new
+                {
+                    Id = planId1,
+                    Name = "Новичок",
+                    Description = "Абонемент на 1 месяц, чтобы познакомиться с клубом",
+                    DurationInMonths = 1
+                }
+                );
+
+            modelBuilder.Entity<MembershipPlan>()
+                .OwnsOne(p => p.Price)
+                .HasData(new
+                {
+                    MembershipPlanId = planId1,
+                    Amount = 3590m,
+                    Currency = "RUB"
+                });
 
             modelBuilder.Entity<Subscription>(builder =>
             {
