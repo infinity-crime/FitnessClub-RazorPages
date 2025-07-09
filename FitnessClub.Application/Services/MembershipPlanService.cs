@@ -27,6 +27,7 @@ namespace FitnessClub.Application.Services
             {
                 var plansDto = plans.Select(x => new MembershipPlanDto
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     Price = x.Price,
@@ -47,6 +48,7 @@ namespace FitnessClub.Application.Services
 
             var response = new MembershipPlanDto
             {
+                Id = plan.Id,
                 Name = plan.Name,
                 Description = plan.Description,
                 Price = plan.Price,

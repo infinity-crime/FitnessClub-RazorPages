@@ -22,6 +22,7 @@ namespace FitnessClub.Infrastructure.Repositories
         public async Task<IEnumerable<MembershipPlan>?> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _dbContext.Plans
+                .OrderBy(x => x.Price.Amount)
                 .ToListAsync(cancellationToken);
         }
 

@@ -42,7 +42,7 @@ namespace FitnessClub.Web.Pages.Account
                 return Page();
             }
 
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Account/Login");
         }
 
         public class UserInputModel

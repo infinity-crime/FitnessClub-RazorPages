@@ -39,7 +39,7 @@ namespace FitnessClub.Domain.Entities
         public static Subscription Create(User user, MembershipPlan plan)
         {
             if ((user is null) || (plan is null))
-                throw new DomainException("User/Membership plan is required!");
+                throw new DomainException("Пользователь и план абонемента обязательны при создании подписки!");
 
             var id = Guid.NewGuid();
             var startDate = DateTime.Now;

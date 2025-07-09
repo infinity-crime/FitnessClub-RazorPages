@@ -48,10 +48,59 @@ namespace FitnessClub.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Description = "Абонемент на 1 месяц, чтобы познакомиться с клубом",
+                            Id = new Guid("e356bb37-2be5-4ad6-9a66-339e4f10094a"),
+                            Description = "Абонемент на 1 месяц, чтобы познакомиться с клубом.",
                             DurationInMonths = 1,
                             Name = "Новичок"
+                        },
+                        new
+                        {
+                            Id = new Guid("3c1121e5-7282-4d1f-9d57-680b9e36462b"),
+                            Description = "Стандартный абонемент на 1 месяц.",
+                            DurationInMonths = 1,
+                            Name = "Стандарт 1"
+                        },
+                        new
+                        {
+                            Id = new Guid("4bfb3e5e-9d54-40cd-9388-4ad78acdaef4"),
+                            Description = "Выгодный абонемент на 3 месяца.",
+                            DurationInMonths = 3,
+                            Name = "Стандарт 3"
+                        },
+                        new
+                        {
+                            Id = new Guid("ac75452c-6ab6-42cc-9d24-b5e120984286"),
+                            Description = "Полугодовой абонемент для регулярных занятий.",
+                            DurationInMonths = 6,
+                            Name = "Стандарт 6"
+                        },
+                        new
+                        {
+                            Id = new Guid("9ba1a5e7-35cc-4e91-93be-1fe2e27de326"),
+                            Description = "Годовой абонемент с максимальной выгодой.",
+                            DurationInMonths = 12,
+                            Name = "Стандарт 12"
+                        },
+                        new
+                        {
+                            Id = new Guid("d86dec31-d099-43f0-b860-8976f44e50ff"),
+                            Description = "Специальный абонемент для студентов на 3 месяца.",
+                            DurationInMonths = 3,
+                            Name = "Студенческий"
+                        },
+                        new
+                        {
+                            Id = new Guid("b5adb578-bc5d-4d48-a7f1-137185eb9661"),
+                            Description = "Абонемент для посещений в утренние часы (c 6:00 до 12:00).",
+                            DurationInMonths = 1,
+                            Name = "Утренний"
+                        },
+                        new
+                        {
+                            Id = new Guid("78dcd9cd-2373-4cf0-8f64-f32464961788"),
+                            Description = "Абонемент для посещений в дневные часы (c 12:00 до 17:00).",
+                            DurationInMonths = 1,
+                            Name = "Дневной"
                         });
                 });
 
@@ -126,8 +175,50 @@ namespace FitnessClub.Infrastructure.Migrations
                             b1.HasData(
                                 new
                                 {
-                                    MembershipPlanId = new Guid("11111111-1111-1111-1111-111111111111"),
+                                    MembershipPlanId = new Guid("e356bb37-2be5-4ad6-9a66-339e4f10094a"),
                                     Amount = 3590m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("3c1121e5-7282-4d1f-9d57-680b9e36462b"),
+                                    Amount = 3990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("4bfb3e5e-9d54-40cd-9388-4ad78acdaef4"),
+                                    Amount = 10990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("ac75452c-6ab6-42cc-9d24-b5e120984286"),
+                                    Amount = 19990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("9ba1a5e7-35cc-4e91-93be-1fe2e27de326"),
+                                    Amount = 35990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("d86dec31-d099-43f0-b860-8976f44e50ff"),
+                                    Amount = 8990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("b5adb578-bc5d-4d48-a7f1-137185eb9661"),
+                                    Amount = 2990m,
+                                    Currency = "RUB"
+                                },
+                                new
+                                {
+                                    MembershipPlanId = new Guid("78dcd9cd-2373-4cf0-8f64-f32464961788"),
+                                    Amount = 3290m,
                                     Currency = "RUB"
                                 });
                         });

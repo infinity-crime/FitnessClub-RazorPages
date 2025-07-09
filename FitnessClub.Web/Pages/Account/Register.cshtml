@@ -23,31 +23,31 @@
 
                         <div class="mb-3">
                             <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                            <input asp-for="Input.PhoneNumber" class="form-control" />
+                            <input asp-for="Input.PhoneNumber" class="form-control" placeholder="+7(777)777-77-77" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.FirstName" class="form-label"></label>
-                            <input asp-for="Input.FirstName" class="form-control" placeholder="you@example.com" />
+                            <input asp-for="Input.FirstName" class="form-control" placeholder="Иван" />
                             <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.Surname" class="form-label"></label>
-                            <input asp-for="Input.Surname" class="form-control" />
+                            <input asp-for="Input.Surname" class="form-control" placeholder="Иванов" />
                             <span asp-validation-for="Input.Surname" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.Patronymic" class="form-label"></label>
-                            <input asp-for="Input.Patronymic" class="form-control" placeholder="you@example.com" />
+                            <input asp-for="Input.Patronymic" class="form-control" placeholder="Иванович" />
                             <span asp-validation-for="Input.Patronymic" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Input.Password" class="form-label"></label>
-                            <input asp-for="Input.Password" class="form-control" />
+                            <input asp-for="Input.Password" class="form-control" type="password"/>
                             <span asp-validation-for="Input.Password" class="text-danger small"></span>
                         </div>
 
