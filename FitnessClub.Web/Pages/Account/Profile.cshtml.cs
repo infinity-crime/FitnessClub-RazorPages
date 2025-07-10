@@ -15,7 +15,7 @@ namespace FitnessClub.Web.Pages.Account
         private readonly ISubscriptionService _subscriptionService;
 
         public UserDto UserDto { get; set; } = default!;
-        public IEnumerable<SubscriptionDto> ActiveSubscriptions { get; set; } = new List<SubscriptionDto>();
+        public SubscriptionDto? ActiveSubscriptions { get; set; }
 
         public ProfileModel(IUserService userService, ISubscriptionService subscriptionService)
         {
@@ -45,8 +45,7 @@ namespace FitnessClub.Web.Pages.Account
                 return Page();
             }
 
-            ActiveSubscriptions = subs.Value!
-                .Where(s => s.Status == Subscription.SubscriptionStatus.Active);
+            ActiveSubscriptions = subs.Value!;
 
             return Page();
         }

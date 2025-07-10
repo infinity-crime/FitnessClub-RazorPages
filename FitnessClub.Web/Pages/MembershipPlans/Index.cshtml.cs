@@ -1,6 +1,7 @@
 using FitnessClub.Application.DTOs;
 using FitnessClub.Application.DTOs.Commands;
 using FitnessClub.Application.Interfaces;
+using FitnessClub.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -39,6 +40,14 @@ namespace FitnessClub.Web.Pages.MembershipPlans
                 return RedirectToPage("/Account/Login");
 
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var existing = await _subscriptionService.GetByUserIdAsync(userId, HttpContext.RequestAborted);
+            if(existing.Value?.Status == Subscription.SubscriptionStatus.Active)
+            {
+                TempData["Error"] = "У вас ужеесть активный абонемнт!";
+                return RedirectToPage();
+            }
+            
             var command = new PurchaseMembershipCommand { UserId = userId, PlanId = planId };
 
             var result = await _subscriptionService.PurchaseMembershipAsync(command, HttpContext.RequestAborted);

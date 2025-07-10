@@ -17,20 +17,18 @@
     </div>
 
     <h2 class="mb-3">Активные абонементы</h2>
-    @if (Model.ActiveSubscriptions.Any())
+    @if (Model.ActiveSubscriptions != null)
     {
         <div class="list-group mb-4">
-            @foreach(var sub in Model.ActiveSubscriptions)
-            {
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>@sub.MembershipPlanName</strong><br />
-                        @sub.StartDate.ToShortDateString() - @sub.EndDate.ToShortDateString()
-                    </div>
-                    <span class="badge bg-success">Активен</span>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@Model.ActiveSubscriptions.MembershipPlanName</strong><br />
+                    @Model.ActiveSubscriptions.StartDate.ToShortDateString() - @Model.ActiveSubscriptions.EndDate.ToShortDateString()
                 </div>
-            }
+                <span class="badge bg-success">Активен</span>
+            </div>
         </div>
+                
     }
     else
     {

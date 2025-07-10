@@ -29,25 +29,25 @@ namespace FitnessClub.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<IEnumerable<SubscriptionDto>>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<Result<SubscriptionDto>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var subs = await _subscriptionRepository.GetByUserIdAsync(userId, cancellationToken);
-            if (subs == null)
-                return Result<IEnumerable<SubscriptionDto>>.Failure("Список абонементов пуст!");
+            var sub = await _subscriptionRepository.GetByUserIdAsync(userId, cancellationToken);
+            if (sub == null)
+                return Result<SubscriptionDto>.Failure("Список абонементов пуст!");
 
-            var response = subs.Select(s => new SubscriptionDto
+            var response = new SubscriptionDto
             {
-                Id = s.Id,
-                UserId = s.UserId,
-                MembershipPlanId = s.MembershipPlanId,
-                MembershipPlanName = s.MembershipPlan!.Name,
-                StartDate = s.StartDate,
-                EndDate = s.EndDate,
-                Status = s.Status,
-                LastModifiedDate = s.LastModifiedDate
-            });
+                Id = sub.Id,
+                UserId = sub.UserId,
+                MembershipPlanId = sub.MembershipPlanId,
+                MembershipPlanName = sub.MembershipPlan!.Name,
+                StartDate = sub.StartDate,
+                EndDate = sub.EndDate,
+                Status = sub.Status,
+                LastModifiedDate = sub.LastModifiedDate
+            };
 
-            return Result<IEnumerable<SubscriptionDto>>.Success(response);
+            return Result<SubscriptionDto>.Success(response);
         }
 
         public async Task<Result<SubscriptionDto>> PurchaseMembershipAsync(PurchaseMembershipCommand command, CancellationToken cancellationToken)

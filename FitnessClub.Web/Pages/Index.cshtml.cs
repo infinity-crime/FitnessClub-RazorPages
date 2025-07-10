@@ -5,11 +5,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace FitnessClub.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet() { }
+        private readonly ISubscriptionService _subscriptionService;
+
+        public IndexModel(ISubscriptionService subscriptionService)
+        {
+            _subscriptionService = subscriptionService;
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            if(User.Identity!.IsAuthenticated)
+            {
+                var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if(Guid.TryParse(claim, out var userId))
+                {
+                    var sub = await _subscriptionService.GetByUserIdAsync(userId, HttpContext.RequestAborted);
+                    if (sub.IsSuccess)
+                    {
+                        var daysLeft = (sub.Value!.EndDate.Date - DateTime.UtcNow.Date).Days;
+                        ViewData["DaysLeft"] = daysLeft;
+                    }
+                }  
+            }
+            return Page();
+        }
     }
 }

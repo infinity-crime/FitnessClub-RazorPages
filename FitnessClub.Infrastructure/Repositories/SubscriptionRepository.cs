@@ -29,12 +29,11 @@ namespace FitnessClub.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Subscription>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<Subscription?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _dbContext.Subscriptions
                 .Include(s => s.MembershipPlan)
-                .Where(s => s.UserId == userId)
-                .ToListAsync(cancellationToken);
+                .FirstOrDefaultAsync(s => s.UserId == userId);
         }
 
         public Task UpdateAsync(Subscription subscription, CancellationToken cancellationToken)

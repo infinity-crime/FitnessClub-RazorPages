@@ -1,5 +1,32 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Main page";
+    ViewData["Title"] = "Главная страница";
 }
+
+<div class="container py-5">
+    <div class="jumbotron p-5 mb-5 bg-light rounded-3">
+        <h1 class="display-4">Добро пожаловать в Фитнес клуб БГТУ "ВОЕНМЕХ"!</h1>
+        <p class="lead">Тренируйтесь с лучшими тренажерами и профессиональными инструкторами.</p>
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <hr class="my-4" />
+            <p>До конца вашего активного абонемента осталось <strong>@ViewData["DaysLeft"]</strong> дней.</p>
+            <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
+        }
+        else
+        {
+            <a asp-page="/MembershipPlans/Index" class="btn btn-primary btn-lg me-2">Абонементы</a>
+            <a asp-page="/Account/Register" class="btn btn-outline-secondary btn-lg">Регистрация</a>
+        }
+    </div>
+
+    <div class="bg-secondary text-white p-4 rounded-3">
+        <h4>Почему выбирают нас?</h4>
+        <ul>
+            <li>Широкий график работы без выходных</li>
+            <li>Уютная зона отдыха и раздевалок</li>
+            <li>Чистота и безопасность на каждом шагу</li>
+        </ul>
+    </div>
+</div>

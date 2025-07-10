@@ -14,8 +14,10 @@
                 </div>
                 <div class="card-body">
                     <form method="post" novalidate>
-                        <div asp-validation-summary="All" class="alert alert-danger d-none" role="alert" id="validation-summary">
-                        </div>
+                        @if (!ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+                        }
 
                         <div class="mb-3">
                             <label asp-for="Input.Email" class="form-label"></label>

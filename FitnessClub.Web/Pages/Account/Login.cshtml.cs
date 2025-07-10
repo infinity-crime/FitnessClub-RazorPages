@@ -25,9 +25,6 @@ namespace FitnessClub.Web.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-                return Page();
-
             var command = new LoginUserCommand { Email = Input.Email, Password = Input.Password };
 
             var result = await _userService.LoginAsync(command, HttpContext.RequestAborted);

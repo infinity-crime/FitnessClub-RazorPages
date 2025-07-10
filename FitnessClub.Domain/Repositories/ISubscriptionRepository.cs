@@ -11,7 +11,7 @@ namespace FitnessClub.Domain.Repositories
     {
         Task<Subscription?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<IEnumerable<Subscription>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<Subscription?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
 
         Task AddAsync(Subscription subscription, CancellationToken cancellationToken);
 
