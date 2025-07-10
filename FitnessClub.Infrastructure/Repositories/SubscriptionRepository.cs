@@ -1,6 +1,7 @@
 ﻿using FitnessClub.Domain.Entities;
 using FitnessClub.Domain.Repositories;
 using FitnessClub.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,12 @@ namespace FitnessClub.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Subscription>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Subscription>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Subscriptions
+                .Include(s => s.MembershipPlan)
+                .Where(s => s.UserId == userId)
+                .ToListAsync(cancellationToken);
         }
 
         public Task UpdateAsync(Subscription subscription, CancellationToken cancellationToken)

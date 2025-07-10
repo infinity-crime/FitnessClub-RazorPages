@@ -18,7 +18,7 @@ namespace FitnessClub.Web.Pages.MembershipPlans
             _subscriptionService = subscriptionService;
         }
 
-        public IEnumerable<MembershipPlanDto> Plans { get; set; }
+        public IEnumerable<MembershipPlanDto> Plans { get; set; } = new List<MembershipPlanDto>();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -47,7 +47,7 @@ namespace FitnessClub.Web.Pages.MembershipPlans
             else
                 TempData["Success"] = "Абонемент успешно оформлен!";
 
-            return RedirectToPage("/Account/Manage/MySubscriptions");
+            return RedirectToPage();
         }
     }
 }

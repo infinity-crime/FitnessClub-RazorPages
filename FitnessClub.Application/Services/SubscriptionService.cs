@@ -29,6 +29,27 @@ namespace FitnessClub.Application.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Result<IEnumerable<SubscriptionDto>>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var subs = await _subscriptionRepository.GetByUserIdAsync(userId, cancellationToken);
+            if (subs == null)
+                return Result<IEnumerable<SubscriptionDto>>.Failure("Список абонементов пуст!");
+
+            var response = subs.Select(s => new SubscriptionDto
+            {
+                Id = s.Id,
+                UserId = s.UserId,
+                MembershipPlanId = s.MembershipPlanId,
+                MembershipPlanName = s.MembershipPlan!.Name,
+                StartDate = s.StartDate,
+                EndDate = s.EndDate,
+                Status = s.Status,
+                LastModifiedDate = s.LastModifiedDate
+            });
+
+            return Result<IEnumerable<SubscriptionDto>>.Success(response);
+        }
+
         public async Task<Result<SubscriptionDto>> PurchaseMembershipAsync(PurchaseMembershipCommand command, CancellationToken cancellationToken)
         {
             try

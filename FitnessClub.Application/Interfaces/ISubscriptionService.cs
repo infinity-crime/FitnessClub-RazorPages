@@ -11,6 +11,7 @@ namespace FitnessClub.Application.Interfaces
 {
     public interface ISubscriptionService
     {
+        Task<Result<IEnumerable<SubscriptionDto>>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
         Task<Result<SubscriptionDto>> PurchaseMembershipAsync(PurchaseMembershipCommand command, CancellationToken cancellationToken);
     }
 }

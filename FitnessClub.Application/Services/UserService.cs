@@ -29,6 +29,23 @@ namespace FitnessClub.Application.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Result<UserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetByIdAsync(id, cancellationToken);
+            if (user == null)
+                return Result<UserDto>.Failure("Пользователь не найден");
+
+            var response = new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FullName = user.FullName,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return Result<UserDto>.Success(response);
+        }
+
         public async Task<Result<UserDto>> RegisterAsync(RegisterUserCommand command, CancellationToken cancellationToken)
         {
             if (await _userRepository.GetByEmailAsync(command.Email, cancellationToken) is not null)

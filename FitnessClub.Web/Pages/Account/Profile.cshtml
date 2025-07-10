@@ -1,0 +1,41 @@
+﻿@page
+@model FitnessClub.Web.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<div class="container py-5">
+
+    <h1 class="mb-4">Личный кабинет</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">@Model.UserDto.FullName</h5>
+            <p class="card-text">Почта: @Model.UserDto.Email</p>
+            <p class="card-text">Телефон: @Model.UserDto.PhoneNumber</p>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Активные абонементы</h2>
+    @if (Model.ActiveSubscriptions.Any())
+    {
+        <div class="list-group mb-4">
+            @foreach(var sub in Model.ActiveSubscriptions)
+            {
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@sub.MembershipPlanName</strong><br />
+                        @sub.StartDate.ToShortDateString() - @sub.EndDate.ToShortDateString()
+                    </div>
+                    <span class="badge bg-success">Активен</span>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">У вас нет активных абонементов.</div>
+    }
+
+    <a asp-page="/MembershipPlans/Index" class="btn btn-primary">Перейти к абонементам</a>
+</div>
