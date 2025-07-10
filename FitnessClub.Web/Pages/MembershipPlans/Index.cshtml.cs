@@ -36,7 +36,7 @@ namespace FitnessClub.Web.Pages.MembershipPlans
         public async Task<IActionResult> OnPostPurchaseAsync(Guid planId)
         {
             if (User.Identity?.IsAuthenticated == false)
-                return RedirectToPage("/Account/Register");
+                return RedirectToPage("/Account/Login");
 
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var command = new PurchaseMembershipCommand { UserId = userId, PlanId = planId };
