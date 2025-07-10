@@ -18,6 +18,12 @@ namespace FitnessClub.Domain.Entities
         public SubscriptionStatus Status { get; private set; }
         public DateTime? LastModifiedDate { get; private set; }
 
+        // Навигационные свойства для удобства запросов EF Core
+        public User? User { get; private set; }
+        public MembershipPlan? MembershipPlan { get; private set; }
+
+        private Subscription() { }
+
         private Subscription(Guid id, Guid userId, Guid membershipPlanId, DateTime startDate, 
             DateTime endDate, SubscriptionStatus status)
         {
@@ -33,7 +39,7 @@ namespace FitnessClub.Domain.Entities
         public static Subscription Create(User user, MembershipPlan plan)
         {
             if ((user is null) || (plan is null))
-                throw new DomainException("User/Membership plan is required!");
+                throw new DomainException("Пользователь и план абонемента обязательны при создании подписки!");
 
             var id = Guid.NewGuid();
             var startDate = DateTime.Now;

@@ -29,10 +29,27 @@ namespace FitnessClub.Application.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Result<UserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetByIdAsync(id, cancellationToken);
+            if (user == null)
+                return Result<UserDto>.Failure("Пользователь не найден");
+
+            var response = new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FullName = user.FullName,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return Result<UserDto>.Success(response);
+        }
+
         public async Task<Result<UserDto>> RegisterAsync(RegisterUserCommand command, CancellationToken cancellationToken)
         {
             if (await _userRepository.GetByEmailAsync(command.Email, cancellationToken) is not null)
-                return Result<UserDto>.Failure("Email already taken!");
+                return Result<UserDto>.Failure("Этот адрес почты уже используется");
 
             try
             {
@@ -63,10 +80,10 @@ namespace FitnessClub.Application.Services
         {
             var user = await _userRepository.GetByEmailAsync(command.Email, cancellationToken);
             if (user is null || !user.VerifyPassword(command.Password, _passwordHasher))
-                return Result<UserDto>.Failure("Invalid credentials!");
+                return Result<UserDto>.Failure("Данные введены неверно или вы отсутствуете в базе!");
 
             var responseDto = new UserDto
-            {
+            { 
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,

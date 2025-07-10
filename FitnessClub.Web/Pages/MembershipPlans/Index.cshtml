@@ -1,0 +1,65 @@
+﻿@page
+@model FitnessClub.Web.Pages.MembershipPlans.IndexModel
+@{
+    ViewData["Title"] = "Абонементы";
+}
+
+<div class="container py-4">
+
+    <h2 class="mb-4">Доступные абонементы</h2>
+
+    @if(!ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
+    @if(!Model.Plans.Any())
+    {
+        <div class="alert alert-info">
+            Пока что нет доступных абонементов. Пожалуйста, загляните позже!
+        </div>
+    }
+    else
+    {
+        @if(TempData["Success"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["Success"]
+            </div>
+        }
+        else if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var plan in Model.Plans)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@plan.Name</h5>
+                            <p class="card-text flex-grow-1">@plan.Description</p>
+                            <div class="mt-3">
+                                <span class="fw-bold fs-5">@plan.Price.Amount</span>
+                                <span class="text-muted">@plan.Price.Currency</span>
+                            </div>
+                            <form method="post" asp-page-handler="Purchase" class="mt-3">
+                                <input type="hidden" name="planId" value="@plan.Id" />
+                                <button type="submit" class="btn btn-primary w-100">Оформить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>

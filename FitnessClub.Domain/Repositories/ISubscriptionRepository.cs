@@ -11,10 +11,10 @@ namespace FitnessClub.Domain.Repositories
     {
         Task<Subscription?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<IEnumerable<Subscription>?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<Subscription?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
 
-        Task Add(Subscription subscription, CancellationToken cancellationToken);
+        Task AddAsync(Subscription subscription, CancellationToken cancellationToken);
 
-        Task Update(Subscription subscription, CancellationToken cancellationToken);
+        Task UpdateAsync(Subscription subscription, CancellationToken cancellationToken);
     }
 }

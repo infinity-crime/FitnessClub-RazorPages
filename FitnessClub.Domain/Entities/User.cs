@@ -18,6 +18,10 @@ namespace FitnessClub.Domain.Entities
         public FullName FullName { get; private set; }
         public PasswordHash PasswordHash { get; private set; }
 
+        // Навигационное свойство для подписок
+        private readonly List<Subscription> _subscriptions = new();
+        public IReadOnlyCollection<Subscription> Subscriptions => _subscriptions.AsReadOnly();
+
         private User() { }
 
         public User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
