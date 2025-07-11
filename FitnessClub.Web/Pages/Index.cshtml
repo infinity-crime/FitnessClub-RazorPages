@@ -10,9 +10,18 @@
         <p class="lead">Тренируйтесь с лучшими тренажерами и профессиональными инструкторами.</p>
         @if (User.Identity?.IsAuthenticated ?? false)
         {
-            <hr class="my-4" />
-            <p>До конца вашего активного абонемента осталось <strong>@ViewData["DaysLeft"]</strong> дней.</p>
-            <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
+            @if (ViewData["DaysLeft"] != null)
+            {
+                <hr class="my-4" />
+                <p>До конца вашего активного абонемента осталось <strong>@ViewData["DaysLeft"]</strong> дней.</p>
+                <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
+            }
+            else
+            {
+                <hr class="my-4" />
+                <p>У вас нет активных абонементов</p>
+                <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
+            }
         }
         else
         {

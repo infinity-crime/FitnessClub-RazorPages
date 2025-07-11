@@ -44,7 +44,7 @@ namespace FitnessClub.Web.Pages.MembershipPlans
             var existing = await _subscriptionService.GetByUserIdAsync(userId, HttpContext.RequestAborted);
             if(existing.Value?.Status == Subscription.SubscriptionStatus.Active)
             {
-                TempData["Error"] = "У вас ужеесть активный абонемнт!";
+                TempData["Error"] = "У вас уже есть активный абонемнт!";
                 return RedirectToPage();
             }
             
