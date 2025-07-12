@@ -24,7 +24,7 @@ namespace FitnessClub.Domain.Entities
 
         private User() { }
 
-        public User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
+        private User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
         {
             Id = id;
             Email = email;
