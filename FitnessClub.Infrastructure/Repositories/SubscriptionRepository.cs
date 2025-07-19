@@ -24,21 +24,24 @@ namespace FitnessClub.Infrastructure.Repositories
             await _dbContext.AddAsync(subscription, cancellationToken);
         }
 
-        public Task<Subscription?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Subscription?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<Subscription?> GetCurrentForUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _dbContext.Subscriptions
                 .Include(s => s.MembershipPlan)
-                .FirstOrDefaultAsync(s => s.UserId == userId);
+                .Where(s => s.UserId == userId &&
+                            (s.Status == Subscription.SubscriptionStatus.Active || 
+                             s.Status == Subscription.SubscriptionStatus.Frozen))
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public Task UpdateAsync(Subscription subscription, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Subscription>?> GetHistoryForUserAsync(Guid userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Subscriptions
+                .Include(s => s.MembershipPlan)
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.StartDate)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }

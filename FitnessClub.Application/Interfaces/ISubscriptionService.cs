@@ -11,7 +11,11 @@ namespace FitnessClub.Application.Interfaces
 {
     public interface ISubscriptionService
     {
-        Task<Result<SubscriptionDto>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<Result<IEnumerable<SubscriptionDto>>> GetUserSubscriptionHistoryAsync(Guid userId, CancellationToken cancellationToken);
+        Task<Result<SubscriptionDto>> GetCurrentUserSubscriptionAsync(Guid userId, CancellationToken cancellationToken);
+
         Task<Result<SubscriptionDto>> PurchaseMembershipAsync(PurchaseMembershipCommand command, CancellationToken cancellationToken);
+        Task<Result<SubscriptionDto>> FreezeSubscriptionAsync(Guid subscriptionId, CancellationToken cancellationToken);
+        Task<Result<SubscriptionDto>> CancelSubscriptionAsync(Guid subscriptionId, CancellationToken cancellationToken);
     }
 }

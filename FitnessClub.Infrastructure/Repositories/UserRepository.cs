@@ -35,10 +35,5 @@ namespace FitnessClub.Infrastructure.Repositories
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         }
-
-        public Task UpdateAsync(User user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

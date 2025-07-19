@@ -17,23 +17,98 @@
     </div>
 
     <h2 class="mb-3">Активные абонементы</h2>
-    @if (Model.ActiveSubscriptions != null)
+    @if (Model.ActiveSubscription != null)
     {
         <div class="list-group mb-4">
+
             <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <strong>@Model.ActiveSubscriptions.MembershipPlanName</strong><br />
-                    @Model.ActiveSubscriptions.StartDate.ToShortDateString() - @Model.ActiveSubscriptions.EndDate.ToShortDateString()
+                    <strong>@Model.ActiveSubscription.MembershipPlanName</strong><br />
+                    @Model.ActiveSubscription.StartDate.ToShortDateString() - @Model.ActiveSubscription.EndDate.ToShortDateString()
                 </div>
+                <div class="ms-auto" style="margin-right:15px">
+                    <button type="button" class="btn btn-outline-warning"
+                            data-bs-toggle="modal"
+                            data-bs-target="#freezeModal"
+                            data-subscription-id="@Model.ActiveSubscription..Id">
+                        Заморозить
+                    </button>
+                </div>
+
                 <span class="badge bg-success">Активен</span>
             </div>
-        </div>
-                
+            
+        </div>      
     }
     else
     {
         <div class="alert alert-info">У вас нет активных абонементов.</div>
     }
 
+    <h2 class="mb-3">Замороженные абонементы</h2>
+    @if(Model.FrozenSubscription != null)
+    {
+        <div class="list-group mb-4">
+
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@Model.FrozenSubscription.MembershipPlanName</strong><br />
+                    @Model.FrozenSubscription.StartDate.ToShortDateString() - @Model.FrozenSubscription.EndDate.ToShortDateString()
+                </div>
+                <span class="badge bg-warning">Заморожен</span>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">У вас нет замороженных абонементов.</div>
+    }
+
     <a asp-page="/MembershipPlans/Index" class="btn btn-primary">Перейти к абонементам</a>
+
+
+    <!-- Модальное окно заморозки -->
+    <div class="modal fade" id="freezeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Заморозка абонемента</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="FreezeSubscription">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">Выберите длительность заморозки:</label>
+                            <select class="form-select" name="freezeDays" required>
+                                @for (int i = 1; i <= 14; i++)
+                                {
+                                    <option value="@i">@i @(i == 1 ? "день" : i < 5 ? "дня" : "дней")</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-warning">Подтвердить заморозку</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        // Инициализация модального окна
+        const freezeModal = document.getElementById('freezeModal');
+        freezeModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const modalInput = freezeModal.querySelector('#freezeSubscriptionId');
+            modalInput.value = subscriptionId;
+        });
+    </script>
+}

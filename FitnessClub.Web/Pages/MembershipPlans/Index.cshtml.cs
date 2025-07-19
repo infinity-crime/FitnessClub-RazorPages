@@ -41,10 +41,10 @@ namespace FitnessClub.Web.Pages.MembershipPlans
 
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var existing = await _subscriptionService.GetByUserIdAsync(userId, HttpContext.RequestAborted);
-            if(existing.Value?.Status == Subscription.SubscriptionStatus.Active)
+            var existing = await _subscriptionService.GetCurrentUserSubscriptionAsync(userId, HttpContext.RequestAborted);
+            if(existing.IsSuccess)
             {
-                TempData["Error"] = "” вас уже есть активный абонемнт!";
+                TempData["Error"] = "” вас уже есть активный/замороженный абонемент!";
                 return RedirectToPage();
             }
             

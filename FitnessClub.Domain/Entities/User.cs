@@ -43,6 +43,12 @@ namespace FitnessClub.Domain.Entities
             return new User(id, userEmail, userPhone, name, passwordHash);
         }
 
+        /// <summary>
+        /// Проверяет пароль на совпадение
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="hasher"></param>
+        /// <returns></returns>
         public bool VerifyPassword(string password, IPasswordHasher hasher)
         {
             return hasher.Verify(password, PasswordHash.Hash, PasswordHash.Salt);
