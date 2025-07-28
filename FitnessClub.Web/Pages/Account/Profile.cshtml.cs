@@ -15,9 +15,7 @@ namespace FitnessClub.Web.Pages.Account
         private readonly ISubscriptionService _subscriptionService;
 
         public UserDto UserDto { get; set; } = default!;
-
-        public SubscriptionDto? ActiveSubscription { get; set; }
-        public SubscriptionDto? FrozenSubscription { get; set; }
+        public SubscriptionDto? CurrentSubscription { get; set; }
         public List<SubscriptionDto> AllSubscriptionsHistory { get; set; } = new();
 
         public ProfileModel(IUserService userService, ISubscriptionService subscriptionService)
@@ -45,7 +43,7 @@ namespace FitnessClub.Web.Pages.Account
                 return Page();
             }
 
-            ActiveSubscription = sub.Value!;
+            CurrentSubscription = sub.Value!;
 
             return Page();
         }
@@ -53,10 +51,23 @@ namespace FitnessClub.Web.Pages.Account
         public async Task<IActionResult> OnPostFreezeSubscriptionAsync(int freezeDays)
         {
             var userId = GetUserIdFromClaim();
-            if(userId == null)
+            if (userId == null)
                 return Page();
 
-            throw new NotImplementedException();
+            var userResult = await _userService.GetByIdAsync(userId.Value, HttpContext.RequestAborted);
+            if (!userResult.IsSuccess)
+                return RedirectToPage("/Account/Login");
+
+            var sub = await _subscriptionService.FreezeSubscriptionAsync(userResult.Value!.Id, freezeDays, HttpContext.RequestAborted);
+            if (!sub.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, sub.Error!);
+                return Page();
+            }
+
+            CurrentSubscription = sub.Value!;
+
+            return RedirectToPage();
         }
 
         private Guid? GetUserIdFromClaim()

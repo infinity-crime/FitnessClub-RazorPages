@@ -2,6 +2,7 @@
 using FitnessClub.Application.DTOs;
 using FitnessClub.Application.DTOs.Commands;
 using FitnessClub.Application.Interfaces;
+using FitnessClub.Application.Mappings;
 using FitnessClub.Domain.Entities;
 using FitnessClub.Domain.Exceptions;
 using FitnessClub.Domain.Repositories;
@@ -35,17 +36,7 @@ namespace FitnessClub.Application.Services
             if (result == null)
                 return Result<SubscriptionDto>.Failure("Нет текущих абонементов");
 
-            var resultDto = new SubscriptionDto
-            {
-                Id = result.Id,
-                UserId = result.UserId,
-                MembershipPlanId = result.MembershipPlanId,
-                MembershipPlanName = result.MembershipPlan!.Name,
-                StartDate = result.StartDate,
-                EndDate = result.EndDate,
-                Status = result.Status,
-                LastModifiedDate = result.LastModifiedDate
-            };
+            var resultDto = SubscriptionMapper.MapToDto(result);
 
             return Result<SubscriptionDto>.Success(resultDto);
         }
@@ -56,17 +47,7 @@ namespace FitnessClub.Application.Services
             if (result == null)
                 return Result<IEnumerable<SubscriptionDto>>.Failure("История абонементов пуста");
 
-            var resultDto = result.Select(s => new SubscriptionDto
-            {
-                Id = s.Id,
-                UserId = s.UserId,
-                MembershipPlanId = s.MembershipPlanId,
-                MembershipPlanName = s.MembershipPlan!.Name,
-                StartDate = s.StartDate,
-                EndDate = s.EndDate,
-                Status = s.Status,
-                LastModifiedDate = s.LastModifiedDate
-            });
+            var resultDto = result.Select(s => SubscriptionMapper.MapToDto(s));
 
             return Result<IEnumerable<SubscriptionDto>>.Success(resultDto);
         }
@@ -84,16 +65,7 @@ namespace FitnessClub.Application.Services
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                SubscriptionDto response = new SubscriptionDto
-                {
-                    Id = sub.Id,
-                    UserId = sub.UserId,
-                    MembershipPlanId = sub.MembershipPlanId,
-                    StartDate = sub.StartDate,
-                    EndDate = sub.EndDate,
-                    Status = sub.Status,
-                    LastModifiedDate = sub.LastModifiedDate
-                };
+                SubscriptionDto response = SubscriptionMapper.MapToDto(sub);
 
                 return Result<SubscriptionDto>.Success(response);
             }
@@ -108,9 +80,25 @@ namespace FitnessClub.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<Result<SubscriptionDto>> FreezeSubscriptionAsync(Guid subscriptionId, CancellationToken cancellationToken)
+        public async Task<Result<SubscriptionDto>> FreezeSubscriptionAsync(Guid userId, int freezeDays, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var sub = await _subscriptionRepository.GetCurrentForUserAsync(userId, cancellationToken);
+            if (sub!.Status == Subscription.SubscriptionStatus.Frozen)
+                return Result<SubscriptionDto>.Failure($"Subscription status {sub.Status}");
+
+            try
+            {
+                sub.Freeze(TimeSpan.FromDays(freezeDays));
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                SubscriptionDto response = SubscriptionMapper.MapToDto(sub);
+
+                return Result<SubscriptionDto>.Success(response);
+            }
+            catch (DomainException ex)
+            {
+                return Result<SubscriptionDto>.Failure(ex.Message);
+            }
         }
     }
 }

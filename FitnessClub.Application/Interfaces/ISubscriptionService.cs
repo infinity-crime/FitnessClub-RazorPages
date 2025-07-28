@@ -15,7 +15,7 @@ namespace FitnessClub.Application.Interfaces
         Task<Result<SubscriptionDto>> GetCurrentUserSubscriptionAsync(Guid userId, CancellationToken cancellationToken);
 
         Task<Result<SubscriptionDto>> PurchaseMembershipAsync(PurchaseMembershipCommand command, CancellationToken cancellationToken);
-        Task<Result<SubscriptionDto>> FreezeSubscriptionAsync(Guid subscriptionId, CancellationToken cancellationToken);
+        Task<Result<SubscriptionDto>> FreezeSubscriptionAsync(Guid userId, int freezeDays, CancellationToken cancellationToken);
         Task<Result<SubscriptionDto>> CancelSubscriptionAsync(Guid subscriptionId, CancellationToken cancellationToken);
     }
 }

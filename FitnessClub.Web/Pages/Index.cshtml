@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+@using FitnessClub.Domain.Entities
 @{
     ViewData["Title"] = "Главная страница";
 }
@@ -10,10 +11,16 @@
         <p class="lead">Тренируйтесь с лучшими тренажерами и профессиональными инструкторами.</p>
         @if (User.Identity?.IsAuthenticated ?? false)
         {
-            @if (ViewData["DaysLeft"] != null)
+            @if (ViewData["DaysLeft"] != null && Model.CurrentSubscription!.Status == Subscription.SubscriptionStatus.Active)
             {
                 <hr class="my-4" />
                 <p>До конца вашего активного абонемента осталось <strong>@ViewData["DaysLeft"]</strong> дней.</p>
+                <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
+            }
+            else if (ViewData["DaysLeft"] != null && Model.CurrentSubscription!.Status == Subscription.SubscriptionStatus.Frozen)
+            {
+                <hr class="my-4" />
+                <p>В данный момент ваш абонемент заморожен, обновлена дата окончания: @Model.CurrentSubscription.EndDate</p>
                 <a asp-page="/Account/Profile" class="btn btn-primary btn-lg">Мой профиль</a>
             }
             else
