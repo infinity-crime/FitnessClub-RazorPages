@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace FitnessClub.Application.Common
 {
-    /* Exceptions cannot be passed further from the application layer, 
-     * so we need a class that will allow us to return results more concisely. */
+    /* Исключения не могут быть переданы дальше уровня приложения,
+    * поэтому нам нужен класс, который позволит нам возвращать результаты более лаконично */
     public class Result<T>
     {
         public bool IsSuccess { get; }

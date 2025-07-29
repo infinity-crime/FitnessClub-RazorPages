@@ -20,11 +20,12 @@ namespace FitnessClub.Domain.Entities
 
         // Навигационное свойство для подписок
         private readonly List<Subscription> _subscriptions = new();
+
         public IReadOnlyCollection<Subscription> Subscriptions => _subscriptions.AsReadOnly();
 
         private User() { }
 
-        public User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
+        private User(Guid id, Email email, PhoneNumber phoneNumber, FullName fullname, PasswordHash passwordHash)
         {
             Id = id;
             Email = email;
@@ -43,6 +44,12 @@ namespace FitnessClub.Domain.Entities
             return new User(id, userEmail, userPhone, name, passwordHash);
         }
 
+        /// <summary>
+        /// Проверяет пароль на совпадение
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="hasher"></param>
+        /// <returns></returns>
         public bool VerifyPassword(string password, IPasswordHasher hasher)
         {
             return hasher.Verify(password, PasswordHash.Hash, PasswordHash.Salt);

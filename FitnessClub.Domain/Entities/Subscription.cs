@@ -36,6 +36,75 @@ namespace FitnessClub.Domain.Entities
             LastModifiedDate = DateTime.UtcNow;
         }
 
+        /// <summary>
+        /// Завершает активную подписку, если ее срок закончился
+        /// </summary>
+        /// <exception cref="DomainException"></exception>
+        public void Finish()
+        {
+            if (Status != SubscriptionStatus.Active)
+                throw new DomainException("Невозможно завершить неактивную подписку!");
+
+            if(DateTime.UtcNow <= EndDate)
+                throw new DomainException("Срок действия подписки еще не закончился!");
+
+            Status = SubscriptionStatus.Expired;
+
+            LastModifiedDate = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Отменяет подписку в течении 1 дня после ее активации.
+        /// </summary>
+        /// <exception cref="DomainException"></exception>
+        public void Cancel()
+        {
+            if (Status != SubscriptionStatus.Active)
+                throw new DomainException("Отменить можно только активную подписку!");
+
+            if(StartDate.AddDays(1) < DateTime.UtcNow)
+                throw new DomainException("Отменить подписку можно только в течении 1 дня после ее активации");
+
+            Status = SubscriptionStatus.Canceled;
+
+            LastModifiedDate = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Замораживает подписку на указанный период (максимум 2 недели).
+        /// </summary>
+        /// <param name="freezeDuration"></param>
+        /// <exception cref="DomainException"></exception>
+        public void Freeze(TimeSpan freezeDuration)
+        {
+            if(Status != SubscriptionStatus.Active)
+                throw new DomainException("Можно заморозить только активную подписку!");
+
+            if(freezeDuration.Days > 14)
+                throw new DomainException("Подписку нельзя заморозить больше чем на 14 дней!");
+
+            if(freezeDuration.TotalSeconds <= 0)
+                throw new DomainException("Длительность заморозки должна быть положительной!");
+
+            Status = SubscriptionStatus.Frozen;
+            EndDate = EndDate.Add(freezeDuration);
+
+            LastModifiedDate = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Размораживает замороженную подписку
+        /// </summary>
+        /// <exception cref="DomainException"></exception>
+        public void Unfreeze()
+        {
+            if(Status != SubscriptionStatus.Frozen)
+                throw new DomainException("Незамороженную подписку нельзя разморозить!");
+
+            Status = SubscriptionStatus.Active;
+            LastModifiedDate = DateTime.UtcNow;
+        }
+
         public static Subscription Create(User user, MembershipPlan plan)
         {
             if ((user is null) || (plan is null))
@@ -48,12 +117,19 @@ namespace FitnessClub.Domain.Entities
             return new Subscription(id, user.Id, plan.Id, startDate, endDate, SubscriptionStatus.Active);
         }
 
+        /// <summary>
+        /// Перечисление всех состояний подписки.
+        /// Active - действует прямо сейчас.
+        /// Frozen - заморожена на срок от 1 до 14 дней.
+        /// Expired - закончилась.
+        /// Canceled - отменена пользователем.
+        /// </summary>
         public enum SubscriptionStatus
         {
-            Active, // активна 
-            Frozen, // заморожена
-            Expired, // закончилась
-            Canceled // отменена
+            Active, 
+            Frozen, 
+            Expired, 
+            Canceled 
         }
     }
 }

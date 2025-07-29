@@ -1,6 +1,7 @@
 ﻿using FitnessClub.Application.Common;
 using FitnessClub.Application.DTOs;
 using FitnessClub.Application.Interfaces;
+using FitnessClub.Application.Mappings;
 using FitnessClub.Domain.Repositories;
 
 using System;
@@ -25,14 +26,7 @@ namespace FitnessClub.Application.Services
             var plans = await _membershipPlanRepository.GetAllAsync(cancellationToken);
             if(plans != null)
             {
-                var plansDto = plans.Select(x => new MembershipPlanDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    Price = x.Price,
-                    DurationInMonths = x.DurationInMonths
-                });
+                var plansDto = plans.Select(x => MembershipPlanMapper.MapToDto(x));
 
                 return Result<IEnumerable<MembershipPlanDto>>.Success(plansDto);
             }
@@ -46,14 +40,7 @@ namespace FitnessClub.Application.Services
             if (plan == null)
                 return Result<MembershipPlanDto>.Failure("Такого абонемента нет");
 
-            var response = new MembershipPlanDto
-            {
-                Id = plan.Id,
-                Name = plan.Name,
-                Description = plan.Description,
-                Price = plan.Price,
-                DurationInMonths = plan.DurationInMonths
-            };
+            var response = MembershipPlanMapper.MapToDto(plan);
 
             return Result<MembershipPlanDto>.Success(response);
         }

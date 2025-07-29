@@ -9,12 +9,29 @@ namespace FitnessClub.Domain.Repositories
 {
     public interface ISubscriptionRepository
     {
-        Task<Subscription?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        /// <summary>
+        /// Получает единственную текущую подписку пользователя (активную или замороженную).
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Subscription?</returns>
+        Task<Subscription?> GetCurrentForUserAsync(Guid userId, CancellationToken cancellationToken);
 
-        Task<Subscription?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        /// <summary>
+        /// Получает всю историю подписок пользователя за все время, отсортированную по дате покупки (убывание).
+        /// Не рекомендуется изменение подписок, полученных этим методом, так как отслеживание сущностей не используется.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IEnumerable<Subscription>?> GetHistoryForUserAsync(Guid userId, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Добавляет подписку для пользователя.
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task AddAsync(Subscription subscription, CancellationToken cancellationToken);
-
-        Task UpdateAsync(Subscription subscription, CancellationToken cancellationToken);
     }
 }

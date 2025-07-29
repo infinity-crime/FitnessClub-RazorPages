@@ -1,6 +1,8 @@
+using FitnessClub.Application.DTOs;
 using FitnessClub.Application.DTOs.Commands;
 using FitnessClub.Application.Interfaces;
 using FitnessClub.Application.Services;
+using FitnessClub.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,6 +20,8 @@ namespace FitnessClub.Web.Pages
             _subscriptionService = subscriptionService;
         }
 
+        public SubscriptionDto? CurrentSubscription { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             if(User.Identity!.IsAuthenticated)
@@ -25,13 +29,14 @@ namespace FitnessClub.Web.Pages
                 var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if(Guid.TryParse(claim, out var userId))
                 {
-                    var sub = await _subscriptionService.GetByUserIdAsync(userId, HttpContext.RequestAborted);
+                    var sub = await _subscriptionService.GetCurrentUserSubscriptionAsync(userId, HttpContext.RequestAborted);
                     if (sub.IsSuccess)
                     {
+                        CurrentSubscription = sub.Value;
                         var daysLeft = (sub.Value!.EndDate.Date - DateTime.UtcNow.Date).Days;
                         ViewData["DaysLeft"] = daysLeft;
                     }
-                }  
+                }
             }
             return Page();
         }
