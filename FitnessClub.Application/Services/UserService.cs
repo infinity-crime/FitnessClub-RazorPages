@@ -2,6 +2,7 @@
 using FitnessClub.Application.DTOs;
 using FitnessClub.Application.DTOs.Commands;
 using FitnessClub.Application.Interfaces;
+using FitnessClub.Application.Mappings;
 using FitnessClub.Domain.Entities;
 using FitnessClub.Domain.Exceptions;
 using FitnessClub.Domain.Repositories;
@@ -19,6 +20,7 @@ namespace FitnessClub.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -35,13 +37,7 @@ namespace FitnessClub.Application.Services
             if (user == null)
                 return Result<UserDto>.Failure("Пользователь не найден");
 
-            var response = new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FullName = user.FullName,
-                PhoneNumber = user.PhoneNumber
-            };
+            var response = UserMapper.MapToDto(user);
 
             return Result<UserDto>.Success(response);
         }
@@ -58,15 +54,10 @@ namespace FitnessClub.Application.Services
                 var user = User.Register(command.Email, command.PhoneNumber, command.Password, _passwordHasher, fullname);
 
                 await _userRepository.AddAsync(user, cancellationToken);
+
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                var responseDto = new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FullName = fullname,
-                    PhoneNumber = user.PhoneNumber
-                };
+                var responseDto = UserMapper.MapToDto(user);
 
                 return Result<UserDto>.Success(responseDto);
             }
@@ -82,13 +73,7 @@ namespace FitnessClub.Application.Services
             if (user is null || !user.VerifyPassword(command.Password, _passwordHasher))
                 return Result<UserDto>.Failure("Данные введены неверно или вы отсутствуете в базе!");
 
-            var responseDto = new UserDto
-            { 
-                Id = user.Id,
-                Email = user.Email,
-                FullName = user.FullName,
-                PhoneNumber = user.PhoneNumber
-            };
+            var responseDto = UserMapper.MapToDto(user);
 
             return Result<UserDto>.Success(responseDto);
         }

@@ -117,6 +117,13 @@ namespace FitnessClub.Domain.Entities
             return new Subscription(id, user.Id, plan.Id, startDate, endDate, SubscriptionStatus.Active);
         }
 
+        /// <summary>
+        /// Перечисление всех состояний подписки.
+        /// Active - действует прямо сейчас.
+        /// Frozen - заморожена на срок от 1 до 14 дней.
+        /// Expired - закончилась.
+        /// Canceled - отменена пользователем.
+        /// </summary>
         public enum SubscriptionStatus
         {
             Active, 
